@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="bn"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Idioms & Phrases</title>
+<style>
+:root{--bg:#f3f4f6;--card:#fff;--ink:#111;--mut:#666;--grn:#2e7d4f;--bn:#b5651d;--gold:#e0a63e;--ex:#dde8f7;--sim:#c6e6cb;--opp:#e6d8c8;--box:#fbefc4;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#15161a;--card:#202228;--ink:#f1f1f1;--mut:#a5a8b0;--grn:#6fcf97;--bn:#e8a560;--ex:#243349;--sim:#25402e;--opp:#43352a;--box:#43391f}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Noto Sans Bengali",sans-serif}
+.w{max-width:560px;margin:auto;padding:14px 14px 90px}
+header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.logo{width:42px;height:42px;border-radius:12px;background:#000;color:#f08a24;font:800 26px Georgia,serif;display:flex;align-items:center;justify-content:center}
+h1{font-size:19px;margin:0}small{color:var(--mut)}
+.btn{border:2.5px solid var(--ink);background:var(--card);color:var(--ink);border-radius:14px;padding:8px 12px;font-weight:700;box-shadow:0 4px 0 var(--ink);cursor:pointer;font-size:14px}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.g{background:#1f9d55;color:#fff}
+.bar{display:flex;gap:8px;margin-bottom:14px}.bar input,.bar select{flex:1;min-width:0;border:2.5px solid var(--ink);border-radius:14px;padding:10px;background:var(--card);color:var(--ink);font-size:15px}
+.c{background:var(--card);border:2.5px solid var(--ink);border-radius:20px;box-shadow:0 5px 0 var(--ink);padding:14px 16px;margin-bottom:18px;cursor:pointer}
+.c h2{margin:0 0 6px;font-size:21px;color:var(--grn)}.c p{margin:4px 0}.bn{color:var(--bn);font-weight:700}
+.tag{display:inline-block;border:2px solid var(--ink);border-radius:12px;padding:3px 10px;font-weight:700;font-size:13px;margin:6px 6px 0 0}.t1{background:#fbdcc4;color:#111}
+.n{float:right;background:var(--bg);border:1.5px solid var(--mut);border-radius:12px;padding:2px 9px;font-size:13px;color:var(--mut);font-weight:700}
+.big{font:700 30px Georgia,serif;margin:0 0 8px}
+.sec{border-radius:18px;padding:14px 16px;margin:14px 0;border:1.5px solid rgba(128,128,128,.3)}
+.sec b{display:block;font-size:14px;letter-spacing:.5px;margin-bottom:6px;color:var(--grn)}
+.row{display:flex;gap:10px;justify-content:space-between;align-items:center;position:fixed;left:0;right:0;bottom:0;padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));background:var(--bg);border-top:1px solid rgba(128,128,128,.3)}
+.row>*{max-width:200px}.pr{color:var(--mut);font-size:14px;margin:0 0 8px}.chip{border-radius:14px;padding:9px 12px;margin:8px 0;border:2px solid;font-weight:600}.cs{background:var(--sim);border-color:#2e7d4f}.co{background:var(--opp);border-color:#b5502d}.chip i{font-style:normal;font-size:12px;border:1.5px solid;border-radius:8px;padding:1px 6px;margin-right:6px}.nu{color:var(--bn);font-size:13px;font-weight:700;margin:12px 0 4px}
+dialog{border:3px solid var(--ink);border-radius:20px;background:var(--card);color:var(--ink);width:min(92vw,520px)}
+dialog input,dialog textarea{width:100%;border:2px solid var(--ink);border-radius:12px;padding:9px;margin:5px 0;background:var(--bg);color:var(--ink);font-size:14px;font-family:inherit}
+</style></head><body><div style="max-width:560px;margin:auto;padding:12px 14px 0"><a href="index.html" style="display:inline-block;margin:6px 0 4px;padding:6px 12px;border:2.5px solid #111;border-radius:14px;background:#fff;color:#111;font:700 14px system-ui,sans-serif;text-decoration:none;box-shadow:0 3px 0 #111">← Home</a></div><div class="w" id="app"></div>
+<dialog id="dlg"><h3 style="margin-top:0">নতুন Idiom যোগ / Upload</h3>
+<input id="i1" placeholder="Idiom (English)"><input id="i2" placeholder="English meaning"><input id="i3" placeholder="বাংলা অর্থ"><input id="i4" placeholder="Example sentence">
+<div style="display:flex;gap:8px;margin:8px 0 14px"><button class="btn g" onclick="addOne()">Add</button></div>
+<p style="margin:0 0 4px"><b>অনেকগুলো একসাথে upload (.json / .csv)</b><br><small>CSV কলাম: idiom, meaning, bn, example, ssc, others</small></p>
+<input type="file" id="f" accept=".json,.csv,.txt" onchange="upl(this)">
+<p><button class="btn" onclick="dlg.close()">বন্ধ করো</button> <button class="btn" onclick="reset()">Reset</button></p></dialog>
+<script>
+const base=[
+["Beat about (or around) the bush","To avoid talking about the main topic","ঘুরিয়ে-ফিরিয়ে কথা বলা (আসল কথা এড়িয়ে যাওয়া)","Stop beating around the bush and just tell me whether I got the job or not.",23,27],
+["Hit the nail on the head","To say or do something exactly right","একদম ঠিক কথা বলা / সঠিক বিষয় ধরা","You hit the nail on the head when you said the plan was risky.",18,29],
+["Spill the beans","To tell a secret, often by accident","গোপন কথা ফাঁস করে দেওয়া","Don't spill the beans about the surprise party.",27,20],
+["Bite the bullet","To accept a difficult situation and deal with it bravely","কঠিন পরিস্থিতি সাহসের সাথে মেনে নেওয়া","I had to bite the bullet and pay the fine.",19,25],
+["Under the weather","Not feeling well; slightly ill","শরীর ভালো না থাকা (সামান্য অসুস্থ)","I'm feeling under the weather today.",24,18],
+["Cost an arm and a leg","To cost a lot of money","অনেক দামি হওয়া / প্রচুর টাকা খরচ হওয়া","That car cost him an arm and a leg.",24,15],
+["Once in a blue moon","Very rarely; almost never","কালেভদ্রে (খুব কমই)","He visits us once in a blue moon.",21,18],
+["A piece of cake","Something that is very easy to do","জলভাত / খুব সহজ কাজ","The maths paper was a piece of cake.",20,16],
+["Call it a day","To decide to stop working for the day","আজকের মতো কাজ শেষ করা","We're tired, let's call it a day.",19,17],
+["Hit the sack (or hay)","To go to bed; to sleep","ঘুমাতে যাওয়া","I'm exhausted, I'm going to hit the sack.",17,19],
+["Let the cat out of the bag","To reveal a secret by mistake","ভুল করে গোপন কথা ফাঁস করা","She let the cat out of the bag about the gift.",14,22],
+["Break the ice","To make people feel more relaxed in a social situation","আড়ষ্টতা কাটিয়ে আলাপ শুরু করা","He told a joke to break the ice.",13,22],
+["A blessing (or boon) in disguise","Something that seems bad at first but turns out to be good","ছদ্মবেশে আশীর্বাদ (প্রথমে খারাপ, পরে ভালো)","Losing that job was a blessing in disguise.",23,11],
+["A bolt from the blue","A sudden and unexpected event","অপ্রত্যাশিত ঘটনা / বিনা মেঘে বজ্রপাত","The news of his resignation was a bolt from the blue.",15,19],
+["Bury the hatchet","To stop fighting or arguing and become friendly","ঝগড়া মিটিয়ে বন্ধুত্ব করা","The two brothers finally buried the hatchet.",18,15],
+["Burn the midnight oil","To work or study late into the night","গভীর রাত পর্যন্ত পড়া বা কাজ করা","She burned the midnight oil before the exam.",16,16],
+["Wild goose chase","A search for something that is impossible to find","বৃথা খোঁজাখুঁজি / অসম্ভব কিছুর পেছনে ছোটা","Looking for the lost key was a wild goose chase.",18,13],
+["Face the music","To accept consequences","নিজের কাজের ফল ভোগ করা","He broke the rule, now he must face the music.",23,7],
+["On cloud nine","Extremely happy; in a state of bliss","আনন্দে আত্মহারা","She was on cloud nine after the result.",16,14],
+["Sit on the fence","To avoid taking sides or making a decision","নিরপেক্ষ থাকা / সিদ্ধান্ত না নেওয়া","Don't sit on the fence, choose a side.",20,10],
+["Bite off more than one can chew","To take on more responsibility than one can manage","সাধ্যের বেশি কাজ ঘাড়ে নেওয়া","He bit off more than he could chew with three jobs.",14,15]
+].map((a,i)=>({id:i+1,idiom:a[0],meaning:a[1],bn:a[2],example:a[3],ssc:a[4],others:a[5]}));
+const X=[
+["বিট অ্যাবাউট দ্য বুশ","Hem and haw|ইতস্তত করে কথা এড়ানো","Get to the point|সোজা আসল কথায় আসা","কেউ যখন আসল বিষয় এড়িয়ে ঘুরিয়ে কথা বলে, বিশেষ করে অস্বস্তিকর পরিস্থিতিতে।","যে ব্যক্তি বিস্তারিত ব্যাখ্যা দেয়, তাকে এটা বলা ঠিক নয়।","ভাবো, তুমি ঝোপের (bush) চারপাশে ঘুরছ কিন্তু ভেতরে ঢুকছ না — আসল কথায় আসছ না।","আগেকার পাখি শিকারে সহায়কেরা ঝোপ পিটিয়ে পাখি বের করত, শিকারি সরাসরি না গিয়ে ঝোপের চারপাশে ঘুরত। পরে ঘুরিয়ে কথা বলা বোঝাতে চালু হয়। Exam takeaway: মূল প্রসঙ্গ এড়ানো।"],
+["হিট দ্য নেইল অন দ্য হেড","Spot on|একদম ঠিক","Miss the mark|লক্ষ্যভ্রষ্ট হওয়া","কেউ যখন ঠিক পয়েন্টটাই বলে বা ধরে, তখন।","ভুল বা আন্দাজি কথা বললে এটা ব্যবহার হয় না।","পেরেকের মাথায় হাতুড়ি ঠিক পড়লেই পেরেক ঢোকে — ঠিক জায়গায় আঘাত = ঠিক কথা।","কাঠমিস্ত্রির কাজ থেকে এসেছে: পেরেকের মাথায় ঠিকভাবে আঘাত করলে কাজ হয়, তাই 'সঠিক বিষয় ধরা' অর্থে।"],
+["স্পিল দ্য বিনস","Let the cat out of the bag|গোপন কথা ফাঁস করা","Keep under wraps|গোপন রাখা","কেউ গোপন কথা বলে ফেললে, প্রায়ই অসাবধানে।","কোনো কিছু ছড়িয়ে পড়লে বা ফেলে দিলে শব্দার্থে ব্যবহার করবে না।","বিন্স (শিম) ছড়িয়ে পড়ল = গোপন কথা বেরিয়ে গেল।","একটি প্রচলিত ধারণা: প্রাচীন গ্রিসে শিমের বীজ দিয়ে ভোট হতো, পাত্র উল্টে গেলে ফল আগেই জানাজানি হতো (নিশ্চিত নয়)।"],
+["বাইট দ্য বুলেট","Grin and bear it|হাসিমুখে সহ্য করা","Shirk|এড়িয়ে যাওয়া","অপ্রিয় বা কঠিন কাজ সাহস করে মেনে নিতে হলে।","সাধারণ ছোটখাটো কাজে ব্যবহার করবে না।","ব্যথা সহ্য করতে বুলেট কামড়ে ধরা — কষ্ট মেনে নেওয়া।","প্রচলিত ধারণা: যুদ্ধক্ষেত্রে অজ্ঞান করার ওষুধ ছাড়া অস্ত্রোপচারে সৈনিককে বুলেট কামড়াতে দেওয়া হতো।"],
+["আন্ডার দ্য ওয়েদার","Off colour|শরীর খারাপ","Fit as a fiddle|পুরো সুস্থ","সামান্য অসুস্থ বা দুর্বল লাগলে।","গুরুতর অসুস্থতা বা হাসপাতালের রোগীর ক্ষেত্রে ব্যবহার করবে না।","আবহাওয়ার (weather) নিচে চাপা পড়ে আছি = শরীর ম্যাজম্যাজ।","প্রচলিত ধারণা: নাবিকরা অসুস্থ হলে খারাপ আবহাওয়া থেকে বাঁচতে ডেকের নিচে থাকত।"],
+["কস্ট অ্যান আর্ম অ্যান্ড আ লেগ","Pay through the nose|অতিরিক্ত দাম দেওয়া","Dirt cheap|জলের দর","কোনো জিনিস খুব দামি হলে।","সামান্য দামি জিনিসে ব্যবহার করবে না।","হাত-পা বিক্রি করার মতো দাম = অনেক দাম।","উৎস নিয়ে মতভেদ আছে; একটি ধারণা, ছবি আঁকার সময় হাত-পা আঁকা কঠিন ও ব্যয়বহুল ছিল।"],
+["ওয়ান্স ইন আ ব্লু মুন","Seldom|কদাচিৎ","All the time|সবসময়","কোনো কিছু খুব কম ঘটলে।","নিয়মিত ঘটনায় ব্যবহার করবে না।","নীল চাঁদ খুব বিরল — তাই কালেভদ্রে।","ব্লু মুন মানে একই মাসে দ্বিতীয় পূর্ণিমা, যা বিরল।"],
+["আ পিস অব কেক","Child's play|ছেলেখেলা","A tough nut to crack|কঠিন সমস্যা","কাজ খুব সহজ হলে।","কঠিন কাজে ব্যবহার করবে না।","কেক খাওয়া সহজ — তাই সহজ কাজ।","ধারণা: আমেরিকায় 'cakewalk' প্রতিযোগিতায় জিতলে কেক পাওয়া যেত, সহজ জয় বোঝাতে।"],
+["কল ইট আ ডে","Knock off|কাজ বন্ধ করা","Keep at it|চালিয়ে যাওয়া","আজকের মতো কাজ শেষ করতে চাইলে।","সম্পূর্ণ ছেড়ে দেওয়া বোঝাতে (যেমন চাকরি ছাড়া) নয়।","আজকের দিন (day) বলে দাও — শেষ!","শ্রমিকদের দিনের কাজ শেষ ঘোষণা করা থেকে চালু (ধারণা)।"],
+["হিট দ্য স্যাক","Turn in|শুতে যাওয়া","Stay up|জেগে থাকা","ঘুমাতে যাওয়া বোঝাতে, কথ্য ভাষায়।","ঔপচারিক লেখায় ব্যবহার করবে না।","স্যাক (বস্তা) বা হে (খড়) মানে আগেকার বিছানা — তাতে শুয়ে পড়া।","আগে বস্তায় খড় ভরে বিছানা বানানো হতো, সেখান থেকে।"],
+["লেট দ্য ক্যাট আউট অব দ্য ব্যাগ","Spill the beans|গোপন ফাঁস করা","Keep mum|চুপ থাকা","ভুল করে গোপন তথ্য বলে ফেললে।","ইচ্ছাকৃত ঘোষণায় ব্যবহার করবে না।","ব্যাগ থেকে বিড়াল বেরিয়ে পড়ল — লুকানো সত্য প্রকাশ।","প্রচলিত ধারণা: মধ্যযুগের বাজারে বস্তায় শূকরছানার নামে বিড়াল গছানো হতো; বস্তা খুললেই প্রতারণা ধরা পড়ত।"],
+["ব্রেক দ্য আইস","Get the ball rolling|শুরু করা","Give the cold shoulder|উপেক্ষা করা","নতুন পরিচয়ে আড়ষ্টতা কাটাতে।","ঝগড়া মেটানোর অর্থে ব্যবহার করবে না (সেটা bury the hatchet)।","বরফ (ice) ভাঙলে পানি বয় — আড়ষ্টতা ভাঙলে আলাপ।","বরফে আটকা জাহাজের জন্য পথ বের করতে বরফ ভাঙা হতো, তা থেকে।"],
+["আ ব্লেসিং ইন ডিসগাইজ","Every cloud has a silver lining|দুঃখের পরে সুখ","Misfortune|দুর্ভাগ্য","প্রথমে খারাপ লাগলেও পরে ভালো ফল দিলে।","শুরু থেকেই ভালো ঘটনায় ব্যবহার করবে না।","ছদ্মবেশে আশীর্বাদ — বাইরে খারাপ, ভেতরে ভালো।","ধারণা করা হয় অষ্টাদশ শতকের কবিতায় প্রথম পাওয়া যায়।"],
+["আ বোল্ট ফ্রম দ্য ব্লু","Out of the blue|হঠাৎ","Expected|প্রত্যাশিত","হঠাৎ অপ্রত্যাশিত খবর বা ঘটনা ঘটলে।","যা আগে থেকে জানা, তাতে ব্যবহার করবে না।","নীল পরিষ্কার আকাশে বজ্রপাত — বিনা মেঘে বজ্রপাত।","মেঘহীন আকাশে বাজ পড়া প্রায় অসম্ভব, তাই অপ্রত্যাশিত বোঝাতে।"],
+["বেরি দ্য হ্যাচেট","Make peace|শান্তি স্থাপন","Be at loggerheads|বিবাদে থাকা","ঝগড়া মিটিয়ে বন্ধুত্ব করলে।","শুধু চুপ থাকা বোঝাতে নয়।","কুঠার (hatchet) মাটিতে পুঁতে ফেলা = যুদ্ধ শেষ।","আদিবাসী আমেরিকানদের শান্তিচুক্তির সময় কুঠার পুঁতে ফেলার প্রথা থেকে।"],
+["বার্ন দ্য মিডনাইট অয়েল","Pull an all-nighter|সারারাত জাগা","Idle away|অলসভাবে কাটানো","রাত জেগে পড়াশোনা বা কাজ করলে।","দিনের বেলার কাজে ব্যবহার করবে না।","মাঝরাতে তেল (oil) পুড়ছে = রাত জেগে কাজ।","আগে বাতি জ্বালানোর তেল পুড়িয়ে রাত জেগে পড়া হতো।"],
+["ওয়াইল্ড গুজ চেজ","Fool's errand|বৃথা কাজ","Hit the bullseye|সফল হওয়া","অর্থহীন, নিষ্ফল খোঁজে।","কঠিন হলেও সম্ভব কাজে ব্যবহার করবে না।","বুনো হাঁসের পিছনে দৌড় — ধরা যায় না, সময় নষ্ট।","ষোড়শ শতকের একধরনের ঘোড়দৌড় থেকে (ধারণা)।"],
+["ফেস দ্য মিউজিক","Take the rap|দায় নেওয়া","Dodge the blame|দায় এড়ানো","নিজের ভুলের ফল মেনে নিতে হলে।","ভালো ফল পাওয়ার ক্ষেত্রে ব্যবহার করবে না।","মঞ্চে মিউজিকের সামনে দাঁড়াতেই হবে — পালানো যাবে না।","এক ধারণা অনুযায়ী মঞ্চে নার্ভাস অভিনেতার সামনে অর্কেস্ট্রা থেকে; আরেক ধারণা, সেনাবাহিনীতে বহিষ্কারের ড্রাম।"],
+["অন ক্লাউড নাইন","Over the moon|আনন্দে আত্মহারা","Down in the dumps|মন খারাপ","খুব খুশি হলে।","সামান্য খুশিতে ব্যবহার করবে না।","মেঘের ৯ নম্বর স্তরে উড়ছি = অতি আনন্দ।","ধারণা: আমেরিকার আবহাওয়া শ্রেণিতে cloud nine সবচেয়ে উঁচু মেঘ ছিল।"],
+["সিট অন দ্য ফেন্স","Be neutral|নিরপেক্ষ থাকা","Take sides|পক্ষ নেওয়া","কোনো পক্ষ না নিলে বা সিদ্ধান্ত না নিলে।","পরিষ্কার সিদ্ধান্ত নেওয়া ব্যক্তির জন্য নয়।","বেড়ার ওপর বসে — কোনো দিকে নামছ না।","বেড়ার ওপর বসে দুই দিকই দেখা থেকে।"],
+["বাইট অফ মোর দ্যান ওয়ান ক্যান চিউ","Overreach|সাধ্যের বাইরে যাওয়া","Cut your coat according to your cloth|সাধ্য অনুযায়ী চলা","সাধ্যের বেশি দায়িত্ব নিলে।","সফলভাবে বেশি কাজ সামলালে ব্যবহার করবে না।","যত চিবাতে পারো তার চেয়ে বড় কামড় = ঝামেলা।","মুখে ঢোকানো বড় গ্রাস চিবাতে না পারা থেকে।"]];
+base.forEach((d,i)=>{const x=X[i];d.pron=x[0];d.sim=x[1];d.opp=x[2];d.use=x[3];d.nouse=x[4];d.trick=x[5];d.origin=x[6]});
+let data=base,cur=null,q="",ch="all";
+try{const s=localStorage.getItem("idm");if(s)data=JSON.parse(s)}catch(e){}
+data.forEach((d,i)=>{if(base[i]&&d.idiom===base[i].idiom&&!d.trick)Object.assign(d,base[i],{ssc:d.ssc,others:d.others})});
+const sp=(s,c,l)=>{if(!s)return"";const[a,b]=s.split("|");return `<div class="chip ${c}"><i>${l}</i>${esc(a)}${b?" ("+esc(b)+")":""}</div>`};
+const ex=d=>`<div class="sec" style="background:var(--ex)"><b>EXAMPLE</b>${esc(d.example)}</div>`+((d.sim||d.opp)?`<div class="sec" style="background:var(--sim)"><b>SIMILAR IDIOMS</b>${sp(d.sim,"cs","SIM")}${sp(d.opp,"co","OPP")}</div>`:"")+(d.use?`<div class="sec" style="background:var(--box)"><b>USAGE</b>${esc(d.use)}<div class="nu">কখন ব্যবহার করবে না</div>${esc(d.nouse)}</div>`:"")+(d.trick?`<div class="sec" style="background:var(--sim)"><b>TRICK</b>${esc(d.trick)}</div>`:"")+(d.origin?`<div class="sec" style="background:#ead9f7;color:#222"><b style="color:#6b3fa0">ORIGIN</b>${esc(d.origin)}</div>`:"");
+const save=()=>{try{localStorage.setItem("idm",JSON.stringify(data))}catch(e){}};
+const esc=s=>String(s??"").replace(/[&<>]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[m]));
+function render(){const A=document.getElementById("app");
+if(cur!==null){const d=data[cur];A.innerHTML=`<header><button class="btn" onclick="cur=null;render()">←</button><div><h1>Idiom · ${Math.floor(cur/25)+1}.${0}</h1><small>#${cur+1}/${data.length}</small></div></header>
+<div class="c" style="cursor:default"><span class="n">SSC ${d.ssc||0} · Others ${d.others||0}</span><p class="big">${esc(d.idiom)}</p>${d.pron?`<p class="pr">🔊 ${esc(d.pron)}</p>`:""}<p>${esc(d.meaning)}</p><p class="bn">${esc(d.bn)}</p></div>
+${ex(d)}
+<div class="row"><button class="btn" onclick="go(-1)">‹ Prev</button><small>${cur+1} / ${data.length}</small><button class="btn g" onclick="go(1)">Next ›</button></div>`;scrollTo(0,0);return}
+const chs=Math.ceil(data.length/25);
+let opts='<option value="all">সব chapter</option>';for(let i=0;i<chs;i++)opts+=`<option value="${i}" ${ch==i?"selected":""}>Chapter 1.${i+1} · ${i*25+1}–${Math.min(data.length,i*25+25)}</option>`;
+const L=data.map((d,i)=>[d,i]).filter(([d,i])=>(ch==="all"||Math.floor(i/25)==ch)&&(d.idiom+d.meaning+d.bn).toLowerCase().includes(q.toLowerCase()));
+A.innerHTML=`<header><div class="logo">B</div><div style="flex:1"><h1>Idioms / Phrases</h1><small>${data.length} idioms · Top Idioms</small></div><button class="btn" onclick="dlg.showModal()">＋</button></header>
+<div class="bar"><input id="q" placeholder="🔍 Search..." value="${esc(q)}" oninput="q=this.value;render();document.getElementById('q').focus()"><select onchange="ch=this.value;render()">${opts}</select></div>`+
+L.map(([d,i])=>`<div class="c" onclick="cur=${i};render()"><span class="n">#${i+1}</span><h2>${esc(d.idiom)}</h2>${d.pron?`<p class="pr">🔊 ${esc(d.pron)}</p>`:""}<p>${esc(d.meaning)}</p><p class="bn">${esc(d.bn)}</p><span class="tag t1">SSC ${d.ssc||0}</span><span class="tag">Others ${d.others||0}</span></div>`).join("")||"<p>কিছু পাওয়া যায়নি।</p>";}
+function go(n){cur=Math.max(0,Math.min(data.length-1,cur+n));render()}
+function addOne(){const v=[i1,i2,i3,i4].map(e=>e.value.trim());if(!v[0])return;data.push({idiom:v[0],meaning:v[1],bn:v[2],example:v[3],ssc:0,others:0});[i1,i2,i3,i4].forEach(e=>e.value="");save();dlg.close();render()}
+function csv(t){return t.trim().split(/\r?\n/).map(l=>{const r=[];let c="",qt=0;for(const ch of l){if(ch=='"')qt=!qt;else if(ch==","&&!qt){r.push(c);c=""}else c+=ch}r.push(c);return r})}
+function upl(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{let items;
+if(f.name.endsWith(".json")){items=JSON.parse(r.result)}else{const rows=csv(r.result);const h=rows[0].map(x=>x.trim().toLowerCase());const hasH=h.includes("idiom");items=rows.slice(hasH?1:0).map(c=>({idiom:c[0],meaning:c[1],bn:c[2],example:c[3],ssc:+c[4]||0,others:+c[5]||0}))}
+items=items.filter(x=>x&&x.idiom);data=data.concat(items);save();dlg.close();render()}catch(e){alert("File পড়া যায়নি")}};r.readAsText(f)}
+function reset(){if(confirm("সব মুছে শুধু ২১টা idiom রাখবো?")){data=base;save();dlg.close();render()}}
+render();
+</script></body></html>
